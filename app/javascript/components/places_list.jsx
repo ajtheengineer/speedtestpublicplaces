@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom/client";
+import { Link } from "react-router-dom";
 
 function renderPlacesPage(body, onSearchTextChange) {
   return (
@@ -26,7 +26,9 @@ function renderPlacesPage(body, onSearchTextChange) {
               />
           </div>
           <div className="lg:ml-40 ml-10 space-x-8">
-            <button className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">New Log</button>
+            <Link to="/new-internet-speed">
+              <button className="bg-indigo-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">New Log</button>
+            </Link>
           </div>
         </div>
       </div>
@@ -35,7 +37,7 @@ function renderPlacesPage(body, onSearchTextChange) {
   )
 }
 
-function PlacesList() {
+export default function PlacesList() {
   // State as: A minimum set of parameters that fully represents
   // what you want to render on the screen.
   // showLoading: Boolean
@@ -123,6 +125,3 @@ function PlacesList() {
     return renderPlacesPage(dataSection, onSearchTextChange)
   }
 }
-
-const placesList = ReactDOM.createRoot(document.getElementById("page-places"));
-placesList.render(<PlacesList />);
