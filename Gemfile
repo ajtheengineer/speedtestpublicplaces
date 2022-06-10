@@ -43,6 +43,7 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 
 gem "jsbundling-rails"
+gem "cssbundling-rails"
 
 # Use Sass to process CSS
 # gem "sassc-rails"
