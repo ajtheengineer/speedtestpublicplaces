@@ -1,5 +1,5 @@
 module Api
-  class PlacesController < ApplicationController
+  class PlacesController < BaseController
     
     def index
       places = get_matching_places(params["search_term"]).map do |place|

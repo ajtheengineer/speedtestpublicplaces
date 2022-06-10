@@ -542,6 +542,11 @@ react-dom@^18.1.0:
     loose-envify "^1.1.0"
     scheduler "^0.22.0"
 
+react-internet-meter@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-internet-meter/-/react-internet-meter-1.1.1.tgz#f5dc112a4a3f937eaf6ec4162057c320755d362a"
+  integrity sha512-eEqVY8Af5N8fJnbEKV72OLqyczs3+KYEsMKjv3TgJAxHY8puXsp7IJenfG/D8kML/Fv5Siop/hL9u7YxKKVL1Q==
+
 react-router-dom@^6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.3.0.tgz#a0216da813454e521905b5fa55e0e5176123f43d"
