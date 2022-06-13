@@ -1,0 +1,36 @@
+version: 2.1 # Use 2.1 to enable using orbs and other features.
+
+# Declare the orbs that we'll use in our config.
+# read more about orbs: https://circleci.com/docs/2.0/orb-intro/
+orbs:
+  ruby: circleci/ruby@1.8.0
+  node: circleci/node@5.0.2
+
+jobs:
+  test:
+    docker:
+      - image: cimg/ruby:3.1-node
+      - image: cimg/postgres:14.2
+    environment:
+      RAILS_ENV: test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: publicinternet_test
+    parallelism: 3
+    steps:
+      - checkout
+      - ruby/install-deps
+      - run:
+          command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
+          name: Wait for DB
+      - run:
+          command: 'RAILS_ENV=test bundle exec rake db:setup'
+          name: Database setup
+      - run:
+          name: Run test
+          command: bundle exec rails test
+      
+workflows:
+  build_and_test:
+    jobs:
+      - test
