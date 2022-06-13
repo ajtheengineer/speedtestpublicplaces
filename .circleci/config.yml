@@ -17,11 +17,11 @@ jobs:
   test:
     docker:
       - image: 'cimg/ruby:3.1-node'
-      - environment:
+      - image: 'circleci/postgres:12.8'
+        environment:
           POSTGRES_DB: publicinternet_test
           POSTGRES_PASSWORD: password
           POSTGRES_USER: circleci-demo-ruby
-        image: 'circleci/postgres:12.8'
     environment:
       RAILS_ENV: test
     parallelism: 3
