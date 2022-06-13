@@ -21,6 +21,7 @@ jobs:
     environment:
       RAILS_ENV: test
       POSTGRES_USER: postgres
+      POSTGRES_DATABASE: publicinternet_test
     parallelism: 3
     steps:
       - checkout
