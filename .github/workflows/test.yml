@@ -1,0 +1,58 @@
+name: Rails test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: publicinternet_test
+
+        ports:
+          # maps tcp port 5432 on service container to the host
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.2'
+      - name: Install dependencies
+        run: bundle install
+      - name: Replace database.yml with github-actions.database.yml
+        run: cp config/github-actions.database.yml config/database.yml
+      - name: Set up database
+        run: |
+          RAILS_ENV=test bundle exec rails db:setup
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_DB: publicinternet_test
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+      - name: Run tests
+        run: bundle exec rails test
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_DB: publicinternet_test
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
