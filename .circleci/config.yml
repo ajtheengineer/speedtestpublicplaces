@@ -7,13 +7,6 @@ orbs:
   node: circleci/node@5.0.2
 
 jobs:
-  build:
-    docker:
-      - image: 'cimg/ruby:3.1-node'
-    steps:
-      - checkout
-      - ruby/install-deps
-
   test:
     docker:
       - image: cimg/ruby:3.1-node
@@ -21,7 +14,8 @@ jobs:
     environment:
       RAILS_ENV: test
       POSTGRES_USER: postgres
-      POSTGRES_DATABASE: publicinternet_test
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: publicinternet_test
     parallelism: 3
     steps:
       - checkout
@@ -39,7 +33,4 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test
