@@ -2,7 +2,16 @@ module Api
   class PlacesController < BaseController
     
     def index
-      places = get_matching_places(params["search_term"]).map do |place|
+      matching_places = get_matching_places(params["search_term"])
+
+      order_config = Queries::PlacesOrderer::OrderConfig.new(
+        sort_column: params["sort_column"],
+        sort_order: params["sort_order"]
+      )
+
+      ordered_places = Queries::PlacesOrderer.new.call(matching_places, order_config)
+
+      places_to_return = ordered_places.map do |place|
         {
           name: place.name,
           city: place.city,
@@ -12,7 +21,7 @@ module Api
         }
       end
 
-      render(json: { places: places} )
+      render(json: { places: places_to_return} )
     end
 
     def most_recent_download_speed(place)

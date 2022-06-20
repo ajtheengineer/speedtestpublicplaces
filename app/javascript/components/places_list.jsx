@@ -42,13 +42,15 @@ export default function PlacesList() {
   // what you want to render on the screen.
   // showLoading: Boolean
   // loadedPlaces: [] => gets filled
-  const [loading, setLoading] = useState(true);
-  const [loadedPlaces, setLoadedPlaces] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true)
+  const [loadedPlaces, setLoadedPlaces] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [sortColumn, setSortColumn] = useState("name")
+  const [sortOrder, setSortOrder] = useState("asc")
 
   useEffect(() => {
     // Hit the server and get the places list.
-    const apiEndpoint = `/api/places?search_term=${searchTerm}`
+    const apiEndpoint = `/api/places?search_term=${searchTerm}&sort_column=${sortColumn}&sort_order=${sortOrder}`
     fetch(apiEndpoint)
       .then(response => response.json())
       .then(data => {
@@ -56,12 +58,22 @@ export default function PlacesList() {
         setLoadedPlaces(data["places"])
         setLoading(false)
       });
-  }, [searchTerm])
+  }, [searchTerm, sortColumn, sortOrder])
 
   const onSearchTextChange = (e) =>  {
-    console.log("onSearchTextChange was executed!")
     setLoading(true);
     setSearchTerm(e.target.value);
+  }
+
+  const handleHeaderClick = (clickedSortColumn) => {
+    // If I was already sorted by name, and I click name again, then I toggle the sortOrder (asc <=> desc)
+    if (clickedSortColumn == sortColumn) {
+      // Toggle the sort Order and you're done
+      setSortOrder(sortOrder == "asc" ? "desc" : "asc")
+    } else {
+      setSortColumn(clickedSortColumn)
+      setSortOrder("asc")
+    }
   }
 
   const loadingSection = (<div>Loading...</div>)
@@ -73,8 +85,23 @@ export default function PlacesList() {
           <table className="min-w-full leading-normal">
             <thead>
               <tr>
-                <th className={tableHeaderClass}>Name</th>
-                <th className={tableHeaderClass}>City</th>
+                <th
+                  className={`${tableHeaderClass} cursor-pointer`}
+                  onClick={(clickedSortColumn) => handleHeaderClick("name")}
+                  >
+                    {sortColumn == "name" && sortOrder == "asc" && ("Name ↓")}
+                    {sortColumn == "name" && sortOrder == "desc" && ("Name ↑")}
+                    {sortColumn != "name" && ("Name")}
+                  
+                </th>
+                <th
+                  className={`${tableHeaderClass} cursor-pointer`}
+                  onClick={(clickedSortColumn) => handleHeaderClick("city")}
+                  >
+                    {sortColumn == "city" && sortOrder == "asc" && ("City ↓")}
+                    {sortColumn == "city" && sortOrder == "desc" && ("City ↑")}
+                    {sortColumn != "city" && ("City")}
+                </th>
                 <th className={tableHeaderClass}>Recent Upload Speed</th>
                 <th className={tableHeaderClass}>Recent Upload Speed Units</th>
                 <th className={tableHeaderClass}>Number of measurements</th> 
