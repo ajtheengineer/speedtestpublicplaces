@@ -7,7 +7,7 @@ module Api
       place = FactoryBot.create(:place)
 
       # Hit an endpoint and see if the response is correct.
-      get "/api/places?search_term="
+      get "/api/places?search_term=&sort_column=name&sort_order=asc"
       parsed_body = JSON.parse(response.body)
 
       expected_response = (
@@ -31,7 +31,7 @@ module Api
       place1 = FactoryBot.create(:place, name: "Starbucks")
       place2 = FactoryBot.create(:place, name: "Uncle Bob's Cafe")
 
-      get "/api/places?search_term=Bob"
+      get "/api/places?search_term=Bob&sort_column=name&sort_order=asc"
       parsed_body = JSON.parse(response.body)
 
       expected_response = (
@@ -54,7 +54,7 @@ module Api
     test "answers no places if search term does not match any places" do
       FactoryBot.create(:place, name: "Starbucks")
 
-      get "/api/places?search_term=Blah"
+      get "/api/places?search_term=Blah&sort_column=name&sort_order=asc"
 
       parsed_body = JSON.parse(response.body)
       expected_response = { places: [] }.stringify_keys
@@ -79,7 +79,7 @@ module Api
         created_at: 3.days.ago
       )
 
-      get "/api/places?search_term"
+      get "/api/places?search_term&sort_column=name&sort_order=asc"
 
       parsed_body = JSON.parse(response.body)
       expected_response = {
